@@ -73,24 +73,23 @@ function YourComponent() {
 
 ## Props
 
-| Name               | Default Value       | Type     | Description                                                                             |
-| ------------------ | ------------------- | -------- | --------------------------------------------------------------------------------------- |
-| open               | -                   | boolean  | Determines whether the dialog is open or closed.                                        |
-| existDate          | true                | boolean  | Indicates whether date-related fields will be displayed.                                |
-| existAmount        | true                | boolean  | Indicates whether amount-related fields will be displayed.                              |
-| existOrderFields   | true                | boolean  | Indicates whether fields order-related options will be displayed.                       |
-| firstAmountColumn  | 'Credit'            | string   | The label for the first amount column.                                                  |
-| secondAmountColumn | 'Debit'             | string   | The label for the second amount column.                                                 |
-| onClose            | -                   | function | Callback function to handle the closing of the dialog.                                  |
-| onSubmit           | -                   | function | Callback function to handle the submission of form data.                                |
-| fieldsToBeOrder    | []                  | string[] | An array of field labels specifying the order of fields.                                |
-| delimiters         | See example below ↓ | object[] | An array of objects representing delimiter options with 'label' and 'value' properties. |
-| qualifiers         | See example below ↓ | object[] | An array of objects representing qualifier options with 'label' and 'value' properties. |
-| datesFormats       | See example below ↓ | string[] | An array of string representing date format options.                                    |
-| exampleFile        | See example below ↓ | any[][]  | A 2-dimensional array representing an example CSV file structure with data and headers. |
-| ...other           | -                   | any      | Additional props that can be passed to the component.                                   |
+| Name               | Default Value                              | Type     | Description                                                                             |
+| ------------------ | ------------------------------------------ | -------- | --------------------------------------------------------------------------------------- |
+| open               | -                                          | boolean  | Determines whether the dialog is open or closed.                                        |
+| existDate          | true                                       | boolean  | Indicates whether date-related fields will be displayed.                                |
+| existAmount        | true                                       | boolean  | Indicates whether amount-related fields will be displayed.                              |
+| existOrderFields   | true                                       | boolean  | Indicates whether fields order-related options will be displayed.                       |
+| firstAmountColumn  | 'Credit'                                   | string   | The label for the first amount column.                                                  |
+| secondAmountColumn | 'Debit'                                    | string   | The label for the second amount column.                                                 |
+| onClose            | -                                          | function | Callback function to handle the closing of the dialog.                                  |
+| onSubmit           | -                                          | function | Callback function to handle the submission of form data.                                |
+| fieldsToBeOrder    | []                                         | string[] | An array of field labels specifying the order of fields.                                |
+| delimiters         | [See example below](#default-delimiters)   | object[] | An array of objects representing delimiter options with 'label' and 'value' properties. |
+| qualifiers         | [See example below](#default-qualifiers)   | object[] | An array of objects representing qualifier options with 'label' and 'value' properties. |
+| datesFormats       | [See example below](#default-date-formats) | string[] | An array of string representing date format options.                                    |
+| exampleFile        | [See example below](#default-example-file) | any[][]  | A 2-dimensional array representing an example CSV file structure with data and headers. |
 
-### Delimiters
+### Default Delimiters
 
 ```ts
 [
@@ -106,7 +105,7 @@ function YourComponent() {
 ];
 ```
 
-### Qualifiers
+### Default Qualifiers
 
 ```ts
 [
@@ -116,7 +115,7 @@ function YourComponent() {
 ];
 ```
 
-### Date Formats
+### Default Date Formats
 
 ```ts
 [
@@ -133,7 +132,7 @@ function YourComponent() {
 ];
 ```
 
-### Example File
+### Default Example File
 
 ```ts
 [

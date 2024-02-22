@@ -1,6 +1,6 @@
 {
   "name": "import-csv-form",
-  "version": "0.1.0",
+  "version": "0.4.0",
   "description": "csv file import form using mui",
   "main": "dist/index.js",
   "files": [
