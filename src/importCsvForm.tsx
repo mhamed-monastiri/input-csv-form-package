@@ -31,21 +31,19 @@ import { downloadExcelFile } from "./utils/exportDataInCSVFile";
 // ----------------------------------------------------------------------
 
 export interface FormValues {
-  file: File | "";
-  delimiterType: string;
+  file: File | '';
+  delimiterType?: string;
   delimiter: string;
-  qualifierType: string;
+  qualifierType?: string;
   qualifier: string;
   dateFormat?: string;
   withHeader: boolean;
   creditDebitOneColumn?: string;
-  columnsOrder?: string[];
+  columnsOrder?: { label: string; value: string }[];
 }
 export interface SendedFormValues {
-  file: File | "";
-  delimiterType?: string;
+  file: File | '';
   delimiter: string;
-  qualifierType?: string;
   qualifier: string;
   dateFormat?: string;
   withHeader: boolean;
@@ -63,7 +61,7 @@ interface Props {
   delimiters?: { label: string; value: string }[];
   qualifiers?: { label: string; value: string }[];
   datesFormats?: string[];
-  fieldsToBeOrder?: string[];
+  fieldsToBeOrder?: { label: string; value: string }[];
   firstAmountColumn?: string;
   secondAmountColumn?: string;
   exampleFile?: (string | number | undefined)[][];
@@ -233,16 +231,23 @@ export default function ImportCsvDialog({
   }, [open, reset]);
 
   useEffect(() => {
-    const isCreditDebitOneColumn =
-      values?.creditDebitOneColumn?.toString() === "true";
-    let addedFields: string[] = [];
+    const isCreditDebitOneColumn = values?.creditDebitOneColumn?.toString() === 'true';
+    let addedFields: { label: string; value: string }[] = [];
     if (existAmount) {
       addedFields = isCreditDebitOneColumn
-        ? [`${firstAmountColumn}`, `${secondAmountColumn}`]
-        : [`${firstAmountColumn}/${secondAmountColumn}`];
+        ? [
+            { label: `${firstAmountColumn}`, value: 'credit' },
+            { label: `${secondAmountColumn}`, value: 'debit' },
+          ]
+        : [
+            {
+              label: `${firstAmountColumn}/${secondAmountColumn}`,
+              value: 'creditDebit',
+            },
+          ];
     }
     const selectedFieldsOrder = [...fieldsToBeOrder, ...addedFields];
-    setValue("columnsOrder", selectedFieldsOrder);
+    setValue('columnsOrder', selectedFieldsOrder);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values.creditDebitOneColumn]);
 
@@ -288,12 +293,13 @@ export default function ImportCsvDialog({
   };
 
   const handleImport = async (data: FormValues) => {
+    delete data.delimiterType;
+    delete data.qualifierType;
     const customizedData: SendedFormValues = {
       ...data,
       creditDebitOneColumn: Boolean(data.creditDebitOneColumn),
+      columnsOrder: data?.columnsOrder?.map((field) => field?.value),
     };
-    delete customizedData.delimiterType;
-    delete customizedData.qualifierType;
     if (!existDate) delete customizedData.dateFormat;
     if (!existAmount) delete customizedData.creditDebitOneColumn;
     if (!existOrderFields) delete customizedData.columnsOrder;

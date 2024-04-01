@@ -1,20 +1,21 @@
 import * as React from "react";
 export interface FormValues {
-    file: File | "";
-    delimiterType: string;
+    file: File | '';
+    delimiterType?: string;
     delimiter: string;
-    qualifierType: string;
+    qualifierType?: string;
     qualifier: string;
     dateFormat?: string;
     withHeader: boolean;
     creditDebitOneColumn?: string;
-    columnsOrder?: string[];
+    columnsOrder?: {
+        label: string;
+        value: string;
+    }[];
 }
 export interface SendedFormValues {
-    file: File | "";
-    delimiterType?: string;
+    file: File | '';
     delimiter: string;
-    qualifierType?: string;
     qualifier: string;
     dateFormat?: string;
     withHeader: boolean;
@@ -37,7 +38,10 @@ interface Props {
         value: string;
     }[];
     datesFormats?: string[];
-    fieldsToBeOrder?: string[];
+    fieldsToBeOrder?: {
+        label: string;
+        value: string;
+    }[];
     firstAmountColumn?: string;
     secondAmountColumn?: string;
     exampleFile?: (string | number | undefined)[][];

@@ -181,15 +181,23 @@ function ImportCsvDialog(_a) {
     }, [open, reset]);
     (0, react_1.useEffect)(() => {
         var _a;
-        const isCreditDebitOneColumn = ((_a = values === null || values === void 0 ? void 0 : values.creditDebitOneColumn) === null || _a === void 0 ? void 0 : _a.toString()) === "true";
+        const isCreditDebitOneColumn = ((_a = values === null || values === void 0 ? void 0 : values.creditDebitOneColumn) === null || _a === void 0 ? void 0 : _a.toString()) === 'true';
         let addedFields = [];
         if (existAmount) {
             addedFields = isCreditDebitOneColumn
-                ? [`${firstAmountColumn}`, `${secondAmountColumn}`]
-                : [`${firstAmountColumn}/${secondAmountColumn}`];
+                ? [
+                    { label: `${firstAmountColumn}`, value: 'credit' },
+                    { label: `${secondAmountColumn}`, value: 'debit' },
+                ]
+                : [
+                    {
+                        label: `${firstAmountColumn}/${secondAmountColumn}`,
+                        value: 'creditDebit',
+                    },
+                ];
         }
         const selectedFieldsOrder = [...fieldsToBeOrder, ...addedFields];
-        setValue("columnsOrder", selectedFieldsOrder);
+        setValue('columnsOrder', selectedFieldsOrder);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [values.creditDebitOneColumn]);
     (0, react_1.useEffect)(() => {
@@ -228,9 +236,10 @@ function ImportCsvDialog(_a) {
         reset();
     };
     const handleImport = (data) => __awaiter(this, void 0, void 0, function* () {
-        const customizedData = Object.assign(Object.assign({}, data), { creditDebitOneColumn: Boolean(data.creditDebitOneColumn) });
-        delete customizedData.delimiterType;
-        delete customizedData.qualifierType;
+        var _e;
+        delete data.delimiterType;
+        delete data.qualifierType;
+        const customizedData = Object.assign(Object.assign({}, data), { creditDebitOneColumn: Boolean(data.creditDebitOneColumn), columnsOrder: (_e = data === null || data === void 0 ? void 0 : data.columnsOrder) === null || _e === void 0 ? void 0 : _e.map((field) => field === null || field === void 0 ? void 0 : field.value) });
         if (!existDate)
             delete customizedData.dateFormat;
         if (!existAmount)
