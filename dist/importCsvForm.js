@@ -63,104 +63,76 @@ const exportDataInCSVFile_1 = require("./utils/exportDataInCSVFile");
 // ----------------------------------------------------------------------
 function ImportCsvDialog(_a) {
     var _b, _c;
-    var { open, existDate = true, existAmount = true, existOrderFields = true, firstAmountColumn = "Credit", secondAmountColumn = "Debit", onClose, onSubmit, fieldsToBeOrder = [], delimiters = [
-        { label: "Comma", value: "," },
-        { label: "Semicolon", value: ";" },
-        { label: "Pipe", value: "|" },
-        { label: "Colon", value: ":" },
-        { label: "Space", value: " " },
-        { label: "Period", value: "." },
-        { label: "Hyphen", value: "-" },
-        { label: "Underscore", value: "_" },
-        { label: "Slash", value: "/" },
+    var { open, existDate = true, existAmount = true, existOrderFields = true, firstAmountColumn = 'Credit', secondAmountColumn = 'Debit', onClose, onSubmit, fieldsToBeOrder = [], delimiters = [
+        { label: 'Comma', value: ',' },
+        { label: 'Semicolon', value: ';' },
+        { label: 'Pipe', value: '|' },
+        { label: 'Colon', value: ':' },
+        { label: 'Space', value: ' ' },
+        { label: 'Period', value: '.' },
+        { label: 'Hyphen', value: '-' },
+        { label: 'Underscore', value: '_' },
+        { label: 'Slash', value: '/' },
     ], qualifiers = [
-        { label: "Double Quote", value: '"' },
-        { label: "Single Quote", value: "'" },
-        { label: "Backtick", value: "`" },
+        { label: 'Double Quote', value: '"' },
+        { label: 'Single Quote', value: "'" },
+        { label: 'Backtick', value: '`' },
     ], datesFormats = [
-        "YYYY-MM-DD",
-        "DD/MM/YYYY",
-        "MM/DD/YYYY",
-        "MMMM DD, YYYY",
-        "DD MMMM, YYYY",
-        "YYYY-MM-DD HH:mm:ss",
-        "DD/MM/YYYY HH:mm:ss",
-        "MM/DD/YYYY HH:mm:ss",
-        "YYYY-MM-DDTHH:mm:ssZ",
-        "dddd, MMMM DD, YYYY",
+        'YYYY-MM-DD',
+        'DD/MM/YYYY',
+        'MM/DD/YYYY',
+        'MMMM DD, YYYY',
+        'DD MMMM, YYYY',
+        'YYYY-MM-DD HH:mm:ss',
+        'DD/MM/YYYY HH:mm:ss',
+        'MM/DD/YYYY HH:mm:ss',
+        'YYYY-MM-DDTHH:mm:ssZ',
+        'dddd, MMMM DD, YYYY',
     ], exampleFile = [
-        [
-            "first_column",
-            "second_column",
-            "third_column",
-            "fourth_column",
-            "fifth_column",
-        ],
-        [
-            (0, dayjs_1.default)().format("DD-MM-YYYY"),
-            (0, dayjs_1.default)().format("DD-MM-YYYY"),
-            120,
-            undefined,
-            "text",
-        ],
-        [
-            (0, dayjs_1.default)().format("DD-MM-YYYY"),
-            (0, dayjs_1.default)().format("DD-MM-YYYY"),
-            undefined,
-            500,
-            "text",
-        ],
-        [
-            (0, dayjs_1.default)().format("DD-MM-YYYY"),
-            (0, dayjs_1.default)().format("DD-MM-YYYY"),
-            790,
-            undefined,
-            "text",
-        ],
+        ['first_column', 'second_column', 'third_column', 'fourth_column', 'fifth_column'],
+        [(0, dayjs_1.default)().format('DD-MM-YYYY'), (0, dayjs_1.default)().format('DD-MM-YYYY'), 120, undefined, 'text'],
+        [(0, dayjs_1.default)().format('DD-MM-YYYY'), (0, dayjs_1.default)().format('DD-MM-YYYY'), undefined, 500, 'text'],
+        [(0, dayjs_1.default)().format('DD-MM-YYYY'), (0, dayjs_1.default)().format('DD-MM-YYYY'), 790, undefined, 'text'],
     ] } = _a, other = __rest(_a, ["open", "existDate", "existAmount", "existOrderFields", "firstAmountColumn", "secondAmountColumn", "onClose", "onSubmit", "fieldsToBeOrder", "delimiters", "qualifiers", "datesFormats", "exampleFile"]);
     const [files, setFiles] = (0, react_1.useState)([]);
     const AMOUNT_FIELDS_FORMAT = [
         {
             label: `Two Columns (${firstAmountColumn}/${secondAmountColumn})`,
-            value: "false",
+            value: 'false',
         },
         {
-            label: "Single Column (+/-)",
-            value: "true",
+            label: 'Single Column (+/-)',
+            value: 'true',
         },
     ];
     const uploadEntriesSchema = Yup.object().shape({
-        file: Yup.mixed().required("File is required"),
-        delimiterType: Yup.string().required("Delimiter is required"),
-        delimiter: Yup.string().when("delimiterType", ([delimiterType]) => delimiterType === "OTHER"
-            ? Yup.string().required("Other delimiter is required")
+        file: Yup.mixed().required('File is required'),
+        delimiterType: Yup.string().required('Delimiter is required'),
+        delimiter: Yup.string().when('delimiterType', ([delimiterType]) => delimiterType === 'OTHER'
+            ? Yup.string().required('Other delimiter is required')
             : Yup.string()),
-        qualifierType: Yup.string().required("Qualifier is required"),
-        qualifier: Yup.string().when("qualifierType", ([qualifierType]) => qualifierType === "OTHER"
+        qualifierType: Yup.string().required('Qualifier is required'),
+        qualifier: Yup.string().when('qualifierType', ([qualifierType]) => qualifierType === 'OTHER'
             ? Yup.string()
-                .required("Other delimiter is required")
-                .notOneOf([Yup.ref("delimiter")], "Delimiter and qualifier must be different")
+                .required('Other delimiter is required')
+                .notOneOf([Yup.ref('delimiter')], 'Delimiter and qualifier must be different')
             : Yup.string()),
-        dateFormat: Yup.string().when(() => existDate
-            ? Yup.string().required("Date format is required")
-            : Yup.string()),
-        withHeader: Yup.boolean().required("With header is required"),
+        dateFormat: Yup.string().when(() => existDate ? Yup.string().required('Date format is required') : Yup.string()),
+        withHeader: Yup.boolean().required('With header is required'),
         creditDebitOneColumn: Yup.string().when(() => existAmount
             ? Yup.string().required(`${firstAmountColumn}/${secondAmountColumn} columns format is required`)
             : Yup.string()),
-        columnsOrder: Yup.boolean().when(() => existOrderFields
-            ? Yup.array().required("Columns order is required")
-            : Yup.array()),
+        columnsOrder: Yup.boolean().when(() => existOrderFields ? Yup.array().required('Columns order is required') : Yup.array()),
     });
     const defaultValues = (0, react_1.useMemo)(() => ({
-        file: "",
-        delimiterType: "",
-        delimiter: "",
-        qualifierType: "",
-        qualifier: "",
-        dateFormat: "",
+        file: '',
+        delimiterType: '',
+        delimiter: '',
+        qualifierType: '',
+        qualifier: '',
+        dateFormat: '',
         withHeader: true,
-        creditDebitOneColumn: "false",
+        creditDebitOneColumn: 'false',
         columnsOrder: fieldsToBeOrder,
     }), 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -179,39 +151,39 @@ function ImportCsvDialog(_a) {
     }, [open, reset]);
     (0, react_1.useEffect)(() => {
         var _a;
-        const isCreditDebitOneColumn = ((_a = values === null || values === void 0 ? void 0 : values.creditDebitOneColumn) === null || _a === void 0 ? void 0 : _a.toString()) === "true";
+        const isCreditDebitOneColumn = ((_a = values === null || values === void 0 ? void 0 : values.creditDebitOneColumn) === null || _a === void 0 ? void 0 : _a.toString()) === 'true';
         let addedFields = [];
         if (existAmount) {
             addedFields = isCreditDebitOneColumn
                 ? [
                     {
                         label: `${firstAmountColumn}/${secondAmountColumn}`,
-                        value: "creditDebit",
+                        value: 'creditDebit',
                     },
                 ]
                 : [
-                    { label: `${firstAmountColumn}`, value: "credit" },
-                    { label: `${secondAmountColumn}`, value: "debit" },
+                    { label: `${firstAmountColumn}`, value: 'credit' },
+                    { label: `${secondAmountColumn}`, value: 'debit' },
                 ];
         }
         const selectedFieldsOrder = [...fieldsToBeOrder, ...addedFields];
-        setValue("columnsOrder", selectedFieldsOrder);
+        setValue('columnsOrder', selectedFieldsOrder);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [values.creditDebitOneColumn]);
     (0, react_1.useEffect)(() => {
-        if (values.delimiterType && values.delimiterType !== "OTHER") {
-            setValue("delimiter", values.delimiterType);
+        if (values.delimiterType && values.delimiterType !== 'OTHER') {
+            setValue('delimiter', values.delimiterType);
         }
         else
-            setValue("delimiter", "");
+            setValue('delimiter', '');
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [values.delimiterType, setValue]);
     (0, react_1.useEffect)(() => {
-        if (values.qualifierType && values.qualifierType !== "OTHER") {
-            setValue("qualifier", values.qualifierType);
+        if (values.qualifierType && values.qualifierType !== 'OTHER') {
+            setValue('qualifier', values.qualifierType);
         }
         else
-            setValue("qualifier", "");
+            setValue('qualifier', '');
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [values.qualifierType, setValue]);
     const handleDropSingleFile = (0, react_1.useCallback)((acceptedFiles) => {
@@ -224,7 +196,7 @@ function ImportCsvDialog(_a) {
                     }),
                 ]);
             }
-            setValue("file", Object.assign(newFile, {
+            setValue('file', Object.assign(newFile, {
                 preview: URL.createObjectURL(newFile),
             }));
         }
@@ -235,10 +207,10 @@ function ImportCsvDialog(_a) {
     };
     const handleImport = (data) => __awaiter(this, void 0, void 0, function* () {
         var _d;
-        let newData = Object.assign({}, data);
+        const newData = Object.assign({}, data);
         delete newData.delimiterType;
         delete newData.qualifierType;
-        const customizedData = Object.assign(Object.assign({}, newData), { creditDebitOneColumn: data.creditDebitOneColumn === "true", columnsOrder: (_d = data === null || data === void 0 ? void 0 : data.columnsOrder) === null || _d === void 0 ? void 0 : _d.map((field) => field === null || field === void 0 ? void 0 : field.value) });
+        const customizedData = Object.assign(Object.assign({}, newData), { creditDebitOneColumn: data.creditDebitOneColumn === 'true', columnsOrder: (_d = data === null || data === void 0 ? void 0 : data.columnsOrder) === null || _d === void 0 ? void 0 : _d.map((field) => field === null || field === void 0 ? void 0 : field.value) });
         if (!existDate)
             delete customizedData.dateFormat;
         if (!existAmount)
@@ -250,60 +222,56 @@ function ImportCsvDialog(_a) {
     const handleRemoveFile = (inputFile) => {
         const filtered = files.filter((file) => file !== inputFile);
         setFiles(filtered);
-        setValue("file", filtered[0]);
+        setValue('file', filtered[0]);
     };
     return (React.createElement(customized_dialogs_1.DialogWithCloseButton, Object.assign({ fullWidth: true, maxWidth: "sm", open: open, onClose: handleClose }, other),
         React.createElement(FormProvider_1.default, { methods: methods, onSubmit: handleSubmit(handleImport) },
             React.createElement(material_1.DialogTitle, { sx: { p: (theme) => theme.spacing(3, 3, 2, 3) } }, "Import CSV"),
-            React.createElement(material_1.DialogContent, { dividers: true, sx: { pt: 1, pb: 0, border: "none" } },
-                React.createElement(material_1.Box, { gap: 2, display: "grid", gridTemplateColumns: { xs: "repeat(1, 1fr)" } },
-                    React.createElement(upload_1.Upload, { accept: { "file/csv": [".csv"] }, multiple: true, onDrop: handleDropSingleFile, files: files, onRemove: handleRemoveFile, hideInput: files.length !== 0 }),
+            React.createElement(material_1.DialogContent, { dividers: true, sx: { pt: 1, pb: 0, border: 'none' } },
+                React.createElement(material_1.Box, { gap: 2, display: "grid", gridTemplateColumns: { xs: 'repeat(1, 1fr)' } },
+                    React.createElement(upload_1.Upload, { accept: { 'file/csv': ['.csv'] }, multiple: true, onDrop: handleDropSingleFile, files: files, onRemove: handleRemoveFile, hideInput: files.length !== 0 }),
                     React.createElement(material_1.Divider, null),
                     (values === null || values === void 0 ? void 0 : values.file) && (React.createElement(React.Fragment, null,
                         React.createElement(material_1.Box, { gap: 2, display: "grid", gridTemplateColumns: {
-                                xs: values.delimiterType === "OTHER"
-                                    ? "repeat(2, 1fr)"
-                                    : "repeat(1, 1fr)",
+                                xs: values.delimiterType === 'OTHER' ? 'repeat(2, 1fr)' : 'repeat(1, 1fr)',
                             } },
                             React.createElement(hook_form_1.RHFSelect, { name: "delimiterType", label: "Delimiter *", placeholder: "Delimiter" },
-                                React.createElement(material_1.MenuItem, { value: "", sx: { fontStyle: "italic", color: "text.secondary" } }, "None"),
-                                React.createElement(material_1.Divider, null), (_b = [...delimiters, { label: "Other", value: "OTHER" }]) === null || _b === void 0 ? void 0 :
+                                React.createElement(material_1.MenuItem, { value: "", sx: { fontStyle: 'italic', color: 'text.secondary' } }, "None"),
+                                React.createElement(material_1.Divider, null), (_b = [...delimiters, { label: 'Other', value: 'OTHER' }]) === null || _b === void 0 ? void 0 :
                                 _b.map((delimiter, index) => (React.createElement(material_1.MenuItem, { key: index, value: delimiter === null || delimiter === void 0 ? void 0 : delimiter.value, sx: {
                                         pl: 3,
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        alignItems: "center",
-                                        whiteSpace: "nowrap",
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        whiteSpace: 'nowrap',
                                     } },
                                     React.createElement("span", null, `${delimiter === null || delimiter === void 0 ? void 0 : delimiter.label} `),
-                                    (delimiter === null || delimiter === void 0 ? void 0 : delimiter.value) !== "OTHER" && (React.createElement("span", null,
+                                    (delimiter === null || delimiter === void 0 ? void 0 : delimiter.value) !== 'OTHER' && React.createElement("span", null,
                                         "( ", delimiter === null || delimiter === void 0 ? void 0 :
                                         delimiter.value,
-                                        " )")))))),
-                            values.delimiterType === "OTHER" && (React.createElement(hook_form_1.RHFTextField, { name: "delimiter", label: "Other *" }))),
+                                        " )"))))),
+                            values.delimiterType === 'OTHER' && (React.createElement(hook_form_1.RHFTextField, { name: "delimiter", label: "Other *" }))),
                         React.createElement(material_1.Box, { gap: 2, display: "grid", gridTemplateColumns: {
-                                xs: values.qualifierType === "OTHER"
-                                    ? "repeat(2, 1fr)"
-                                    : "repeat(1, 1fr)",
+                                xs: values.qualifierType === 'OTHER' ? 'repeat(2, 1fr)' : 'repeat(1, 1fr)',
                             } },
-                            React.createElement(hook_form_1.RHFSelect, { name: "qualifierType", label: `Qualifier *`, placeholder: "Qualifier" },
-                                React.createElement(material_1.MenuItem, { value: "", sx: { fontStyle: "italic", color: "text.secondary" } }, "None"),
-                                React.createElement(material_1.Divider, null), (_c = [...qualifiers, { label: "Other", value: "OTHER" }]) === null || _c === void 0 ? void 0 :
+                            React.createElement(hook_form_1.RHFSelect, { name: "qualifierType", label: "Qualifier *", placeholder: "Qualifier" },
+                                React.createElement(material_1.MenuItem, { value: "", sx: { fontStyle: 'italic', color: 'text.secondary' } }, "None"),
+                                React.createElement(material_1.Divider, null), (_c = [...qualifiers, { label: 'Other', value: 'OTHER' }]) === null || _c === void 0 ? void 0 :
                                 _c.map((qualifier, index) => (React.createElement(material_1.MenuItem, { key: index, value: qualifier === null || qualifier === void 0 ? void 0 : qualifier.value, sx: {
                                         pl: 3,
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        alignItems: "center",
-                                        whiteSpace: "nowrap",
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        whiteSpace: 'nowrap',
                                     } },
                                     React.createElement("span", null, `${qualifier === null || qualifier === void 0 ? void 0 : qualifier.label} `),
-                                    (qualifier === null || qualifier === void 0 ? void 0 : qualifier.value) !== "OTHER" && (React.createElement("span", null,
+                                    (qualifier === null || qualifier === void 0 ? void 0 : qualifier.value) !== 'OTHER' && React.createElement("span", null,
                                         " ", qualifier === null || qualifier === void 0 ? void 0 :
                                         qualifier.value,
-                                        " ")))))),
-                            values.qualifierType === "OTHER" && (React.createElement(hook_form_1.RHFTextField, { name: "qualifier", label: `Other *` }))),
+                                        " "))))),
+                            values.qualifierType === 'OTHER' && (React.createElement(hook_form_1.RHFTextField, { name: "qualifier", label: "Other *" }))),
                         existDate && (React.createElement(hook_form_1.RHFSelect, { name: "dateFormat", label: "Date Format *", placeholder: "Date Format" },
-                            React.createElement(material_1.MenuItem, { value: "", sx: { fontStyle: "italic", color: "text.secondary" } }, "None"),
+                            React.createElement(material_1.MenuItem, { value: "", sx: { fontStyle: 'italic', color: 'text.secondary' } }, "None"),
                             React.createElement(material_1.Divider, null), datesFormats === null || datesFormats === void 0 ? void 0 :
                             datesFormats.map((dateFormat, index) => (React.createElement(material_1.MenuItem, { key: index, value: dateFormat }, dateFormat))))),
                         existAmount && (React.createElement(hook_form_1.RHFRadioGroup, { row: true, name: "creditDebitOneColumn", options: AMOUNT_FIELDS_FORMAT || [], label: "Credit/Debit Columns Format *" })),
