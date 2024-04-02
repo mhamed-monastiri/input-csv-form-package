@@ -1,6 +1,6 @@
 import * as React from "react";
 export interface FormValues {
-    file: File | '';
+    file: File | "";
     delimiterType?: string;
     delimiter: string;
     qualifierType?: string;
@@ -14,7 +14,7 @@ export interface FormValues {
     }[];
 }
 export interface SendedFormValues {
-    file: File | '';
+    file: File | "";
     delimiter: string;
     qualifier: string;
     dateFormat?: string;

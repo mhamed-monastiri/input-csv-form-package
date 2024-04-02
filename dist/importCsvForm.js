@@ -62,7 +62,7 @@ const upload_1 = require("./components/upload");
 const exportDataInCSVFile_1 = require("./utils/exportDataInCSVFile");
 // ----------------------------------------------------------------------
 function ImportCsvDialog(_a) {
-    var _b, _c, _d;
+    var _b, _c;
     var { open, existDate = true, existAmount = true, existOrderFields = true, firstAmountColumn = "Credit", secondAmountColumn = "Debit", onClose, onSubmit, fieldsToBeOrder = [], delimiters = [
         { label: "Comma", value: "," },
         { label: "Semicolon", value: ";" },
@@ -122,11 +122,11 @@ function ImportCsvDialog(_a) {
     const AMOUNT_FIELDS_FORMAT = [
         {
             label: `Two Columns (${firstAmountColumn}/${secondAmountColumn})`,
-            value: "true",
+            value: "false",
         },
         {
             label: "Single Column (+/-)",
-            value: "false",
+            value: "true",
         },
     ];
     const uploadEntriesSchema = Yup.object().shape({
@@ -148,11 +148,9 @@ function ImportCsvDialog(_a) {
         creditDebitOneColumn: Yup.string().when(() => existAmount
             ? Yup.string().required(`${firstAmountColumn}/${secondAmountColumn} columns format is required`)
             : Yup.string()),
-        columnsOrder: Yup.array()
-            .of(Yup.string())
-            .when(() => existOrderFields
-            ? Yup.array().of(Yup.string()).required("Columns order is required")
-            : Yup.array().of(Yup.string())),
+        columnsOrder: Yup.boolean().when(() => existOrderFields
+            ? Yup.array().required("Columns order is required")
+            : Yup.array()),
     });
     const defaultValues = (0, react_1.useMemo)(() => ({
         file: "",
@@ -162,7 +160,7 @@ function ImportCsvDialog(_a) {
         qualifier: "",
         dateFormat: "",
         withHeader: true,
-        creditDebitOneColumn: "true",
+        creditDebitOneColumn: "false",
         columnsOrder: fieldsToBeOrder,
     }), 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -181,23 +179,23 @@ function ImportCsvDialog(_a) {
     }, [open, reset]);
     (0, react_1.useEffect)(() => {
         var _a;
-        const isCreditDebitOneColumn = ((_a = values === null || values === void 0 ? void 0 : values.creditDebitOneColumn) === null || _a === void 0 ? void 0 : _a.toString()) === 'true';
+        const isCreditDebitOneColumn = ((_a = values === null || values === void 0 ? void 0 : values.creditDebitOneColumn) === null || _a === void 0 ? void 0 : _a.toString()) === "true";
         let addedFields = [];
         if (existAmount) {
             addedFields = isCreditDebitOneColumn
                 ? [
-                    { label: `${firstAmountColumn}`, value: 'credit' },
-                    { label: `${secondAmountColumn}`, value: 'debit' },
-                ]
-                : [
                     {
                         label: `${firstAmountColumn}/${secondAmountColumn}`,
-                        value: 'creditDebit',
+                        value: "creditDebit",
                     },
+                ]
+                : [
+                    { label: `${firstAmountColumn}`, value: "credit" },
+                    { label: `${secondAmountColumn}`, value: "debit" },
                 ];
         }
         const selectedFieldsOrder = [...fieldsToBeOrder, ...addedFields];
-        setValue('columnsOrder', selectedFieldsOrder);
+        setValue("columnsOrder", selectedFieldsOrder);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [values.creditDebitOneColumn]);
     (0, react_1.useEffect)(() => {
@@ -236,10 +234,11 @@ function ImportCsvDialog(_a) {
         reset();
     };
     const handleImport = (data) => __awaiter(this, void 0, void 0, function* () {
-        var _e;
-        delete data.delimiterType;
-        delete data.qualifierType;
-        const customizedData = Object.assign(Object.assign({}, data), { creditDebitOneColumn: Boolean(data.creditDebitOneColumn), columnsOrder: (_e = data === null || data === void 0 ? void 0 : data.columnsOrder) === null || _e === void 0 ? void 0 : _e.map((field) => field === null || field === void 0 ? void 0 : field.value) });
+        var _d;
+        let newData = Object.assign({}, data);
+        delete newData.delimiterType;
+        delete newData.qualifierType;
+        const customizedData = Object.assign(Object.assign({}, newData), { creditDebitOneColumn: data.creditDebitOneColumn === "true", columnsOrder: (_d = data === null || data === void 0 ? void 0 : data.columnsOrder) === null || _d === void 0 ? void 0 : _d.map((field) => field === null || field === void 0 ? void 0 : field.value) });
         if (!existDate)
             delete customizedData.dateFormat;
         if (!existAmount)
@@ -269,7 +268,7 @@ function ImportCsvDialog(_a) {
                             React.createElement(hook_form_1.RHFSelect, { name: "delimiterType", label: "Delimiter *", placeholder: "Delimiter" },
                                 React.createElement(material_1.MenuItem, { value: "", sx: { fontStyle: "italic", color: "text.secondary" } }, "None"),
                                 React.createElement(material_1.Divider, null), (_b = [...delimiters, { label: "Other", value: "OTHER" }]) === null || _b === void 0 ? void 0 :
-                                _b.map((delimiter, index) => (React.createElement(material_1.MenuItem, { key: index, value: delimiter.value, sx: {
+                                _b.map((delimiter, index) => (React.createElement(material_1.MenuItem, { key: index, value: delimiter === null || delimiter === void 0 ? void 0 : delimiter.value, sx: {
                                         pl: 3,
                                         display: "flex",
                                         justifyContent: "space-between",
@@ -290,7 +289,7 @@ function ImportCsvDialog(_a) {
                             React.createElement(hook_form_1.RHFSelect, { name: "qualifierType", label: `Qualifier *`, placeholder: "Qualifier" },
                                 React.createElement(material_1.MenuItem, { value: "", sx: { fontStyle: "italic", color: "text.secondary" } }, "None"),
                                 React.createElement(material_1.Divider, null), (_c = [...qualifiers, { label: "Other", value: "OTHER" }]) === null || _c === void 0 ? void 0 :
-                                _c.map((qualifier, index) => (React.createElement(material_1.MenuItem, { key: index, value: qualifier.value, sx: {
+                                _c.map((qualifier, index) => (React.createElement(material_1.MenuItem, { key: index, value: qualifier === null || qualifier === void 0 ? void 0 : qualifier.value, sx: {
                                         pl: 3,
                                         display: "flex",
                                         justifyContent: "space-between",
@@ -307,8 +306,8 @@ function ImportCsvDialog(_a) {
                             React.createElement(material_1.MenuItem, { value: "", sx: { fontStyle: "italic", color: "text.secondary" } }, "None"),
                             React.createElement(material_1.Divider, null), datesFormats === null || datesFormats === void 0 ? void 0 :
                             datesFormats.map((dateFormat, index) => (React.createElement(material_1.MenuItem, { key: index, value: dateFormat }, dateFormat))))),
-                        existAmount && (React.createElement(hook_form_1.RHFRadioGroup, { row: true, name: "creditDebitOneColumn", options: AMOUNT_FIELDS_FORMAT, label: "Credit/Debit Columns Format *" })),
-                        existOrderFields && (React.createElement(hook_form_1.RHFOrderItems, { fields: (_d = values === null || values === void 0 ? void 0 : values.columnsOrder) !== null && _d !== void 0 ? _d : [], name: "columnsOrder", label: "Fields Order *" })),
+                        existAmount && (React.createElement(hook_form_1.RHFRadioGroup, { row: true, name: "creditDebitOneColumn", options: AMOUNT_FIELDS_FORMAT || [], label: "Credit/Debit Columns Format *" })),
+                        existOrderFields && (React.createElement(hook_form_1.RHFOrderItems, { fields: (values === null || values === void 0 ? void 0 : values.columnsOrder) || [], name: "columnsOrder", label: "Fields Order *" })),
                         React.createElement(hook_form_1.RHFCheckbox, { name: "withHeader", label: "File With Header *" }))))),
             React.createElement(material_1.DialogActions, null,
                 React.createElement(material_1.Stack, { direction: "row", gap: { xs: 1 } },

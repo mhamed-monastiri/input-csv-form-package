@@ -31,6 +31,7 @@ const React = __importStar(require("react"));
 // eslint-disable-next-line import/no-extraneous-dependencies
 const react_beautiful_dnd_1 = require("react-beautiful-dnd");
 const react_hook_form_1 = require("react-hook-form");
+const camelToFlat_1 = require("../../utils/camelToFlat");
 const iconify_1 = __importDefault(require("../iconify"));
 function RHFOrderItems({ fields, name, label, helperText, }) {
     const { control, setValue } = (0, react_hook_form_1.useFormContext)();
@@ -71,7 +72,7 @@ function RHFOrderItems({ fields, name, label, helperText, }) {
                                     : "#f4f6f8" }, providedd.draggableProps.style) }),
                             React.createElement(material_1.Stack, { sx: { color: "#86939e" } },
                                 React.createElement(iconify_1.default, { icon: "icon-park-outline:drag" })),
-                            item))))),
+                            (0, camelToFlat_1.camelToFlat)(item.label)))))),
                         provided.placeholder)))),
                 React.createElement(material_1.Tooltip, { title: helperText || label, placement: "right-start" },
                     React.createElement(iconify_1.default, { icon: "ri:information-line", width: 23, sx: { cursor: "help", color: "#9AA6B2" } }))),

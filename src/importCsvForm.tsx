@@ -29,9 +29,8 @@ import { Upload } from "./components/upload";
 import { downloadExcelFile } from "./utils/exportDataInCSVFile";
 
 // ----------------------------------------------------------------------
-
 export interface FormValues {
-  file: File | '';
+  file: File | "";
   delimiterType?: string;
   delimiter: string;
   qualifierType?: string;
@@ -42,7 +41,7 @@ export interface FormValues {
   columnsOrder?: { label: string; value: string }[];
 }
 export interface SendedFormValues {
-  file: File | '';
+  file: File | "";
   delimiter: string;
   qualifier: string;
   dateFormat?: string;
@@ -144,11 +143,11 @@ export default function ImportCsvDialog({
   const AMOUNT_FIELDS_FORMAT = [
     {
       label: `Two Columns (${firstAmountColumn}/${secondAmountColumn})`,
-      value: "true",
+      value: "false",
     },
     {
       label: "Single Column (+/-)",
-      value: "false",
+      value: "true",
     },
   ];
 
@@ -184,13 +183,11 @@ export default function ImportCsvDialog({
           )
         : Yup.string()
     ),
-    columnsOrder: Yup.array()
-      .of(Yup.string())
-      .when(() =>
-        existOrderFields
-          ? Yup.array().of(Yup.string()).required("Columns order is required")
-          : Yup.array().of(Yup.string())
-      ),
+    columnsOrder: Yup.boolean().when(() =>
+      existOrderFields
+        ? Yup.array().required("Columns order is required")
+        : Yup.array()
+    ),
   });
 
   const defaultValues = useMemo(
@@ -202,7 +199,7 @@ export default function ImportCsvDialog({
       qualifier: "",
       dateFormat: "",
       withHeader: true,
-      creditDebitOneColumn: "true",
+      creditDebitOneColumn: "false",
       columnsOrder: fieldsToBeOrder,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -231,23 +228,24 @@ export default function ImportCsvDialog({
   }, [open, reset]);
 
   useEffect(() => {
-    const isCreditDebitOneColumn = values?.creditDebitOneColumn?.toString() === 'true';
+    const isCreditDebitOneColumn =
+      values?.creditDebitOneColumn?.toString() === "true";
     let addedFields: { label: string; value: string }[] = [];
     if (existAmount) {
       addedFields = isCreditDebitOneColumn
         ? [
-            { label: `${firstAmountColumn}`, value: 'credit' },
-            { label: `${secondAmountColumn}`, value: 'debit' },
-          ]
-        : [
             {
               label: `${firstAmountColumn}/${secondAmountColumn}`,
-              value: 'creditDebit',
+              value: "creditDebit",
             },
+          ]
+        : [
+            { label: `${firstAmountColumn}`, value: "credit" },
+            { label: `${secondAmountColumn}`, value: "debit" },
           ];
     }
     const selectedFieldsOrder = [...fieldsToBeOrder, ...addedFields];
-    setValue('columnsOrder', selectedFieldsOrder);
+    setValue("columnsOrder", selectedFieldsOrder);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values.creditDebitOneColumn]);
 
@@ -293,11 +291,12 @@ export default function ImportCsvDialog({
   };
 
   const handleImport = async (data: FormValues) => {
-    delete data.delimiterType;
-    delete data.qualifierType;
+    let newData = { ...data };
+    delete newData.delimiterType;
+    delete newData.qualifierType;
     const customizedData: SendedFormValues = {
-      ...data,
-      creditDebitOneColumn: Boolean(data.creditDebitOneColumn),
+      ...newData,
+      creditDebitOneColumn: data.creditDebitOneColumn === "true",
       columnsOrder: data?.columnsOrder?.map((field) => field?.value),
     };
     if (!existDate) delete customizedData.dateFormat;
@@ -367,7 +366,7 @@ export default function ImportCsvDialog({
                       (delimiter, index) => (
                         <MenuItem
                           key={index}
-                          value={delimiter.value}
+                          value={delimiter?.value}
                           sx={{
                             pl: 3,
                             display: "flex",
@@ -414,7 +413,7 @@ export default function ImportCsvDialog({
                       (qualifier, index) => (
                         <MenuItem
                           key={index}
-                          value={qualifier.value}
+                          value={qualifier?.value}
                           sx={{
                             pl: 3,
                             display: "flex",
@@ -459,13 +458,13 @@ export default function ImportCsvDialog({
                   <RHFRadioGroup
                     row
                     name="creditDebitOneColumn"
-                    options={AMOUNT_FIELDS_FORMAT}
+                    options={AMOUNT_FIELDS_FORMAT || []}
                     label="Credit/Debit Columns Format *"
                   />
                 )}
                 {existOrderFields && (
                   <RHFOrderItems
-                    fields={values?.columnsOrder ?? []}
+                    fields={values?.columnsOrder || []}
                     name="columnsOrder"
                     label="Fields Order *"
                   />

@@ -10,6 +10,7 @@ import * as React from "react";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { Controller, useFormContext } from "react-hook-form";
+import { camelToFlat } from "../../utils/camelToFlat";
 import Iconify from "../iconify";
 
 // ----------------------------------------------------------------------
@@ -120,7 +121,7 @@ export default function RHFOrderItems({
                             <Stack sx={{ color: "#86939e" }}>
                               <Iconify icon="icon-park-outline:drag" />
                             </Stack>
-                            {item}
+                            {camelToFlat(item.label)}
                           </Stack>
                         )}
                       </Draggable>
