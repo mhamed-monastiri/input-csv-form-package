@@ -64,7 +64,11 @@ function YourComponent() {
         open={openUploadFile}
         onSubmit={handleImport}
         onClose={handleCloseDialog}
-        fieldsToBeOrder={["Operation Date", "Value Date", "Description"]}
+        fieldsToBeOrder={[
+          { label: "Operation Date", value: "operationDate" },
+          { label: "Value Date", value: "valueDate" },
+          { label: "Description", value: "description" },
+        ]}
       />
     </div>
   );
